@@ -29,5 +29,8 @@ Route::middleware([
 });
 
 Route::get('/add/company', [CompanyController::class , 'create']);
+Route::get('/{company}', function () {
+    return "How are u abbas?";
+});
 
 

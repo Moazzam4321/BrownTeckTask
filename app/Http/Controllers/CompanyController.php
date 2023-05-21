@@ -21,11 +21,10 @@ class CompanyController extends Controller
     public function index()
     {
         try {
-                $companies =  Company::paginate(10);
-                return view('show-companies',['data'=>$companies]);
-        } catch (Exception $e){
-            return response()->json(self::$response);
-        }
+                return view('show-companies');
+            } catch (Exception $e) {
+                return response()->json(self::$response);
+            }
     }
 
     /**
@@ -59,6 +58,7 @@ class CompanyController extends Controller
                 }
                 
                 Company::create_company($company_name,$company_email,$company_website,$file_path);
+                SendingMailController::send_mail($company_email);
 
                 return response()->json($response);
         } catch (Exception $e) {
@@ -72,13 +72,15 @@ class CompanyController extends Controller
     public function show(Request $request)
     {
         try{
+           //dd("ok");
+           //dd($request->query('actionId'));
         $company_id = data_get($request , 'actionId' , null);
         $company_data =  Company::where('id',$company_id)->first();
        
         return view('company-show', ['company' => $company_data]);
         } catch (Exception $e) {
             return response()->json(self::$response);
-        }
+         }
     }
 
     /**
@@ -151,7 +153,9 @@ class CompanyController extends Controller
     public function index1()
     {
         try{
-                $companies =  Company::paginate(10);
+          //  dd("ok");
+            $companies = Company::orderBy('id', 'asc')->paginate(10);
+               // return $compa
                 return response()->json([
                     'error'=> false,
                     'data'=> $companies

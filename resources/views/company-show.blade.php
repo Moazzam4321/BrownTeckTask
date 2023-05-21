@@ -41,6 +41,7 @@
     <img id="logo-preview" src="{{ $company['logo'] }}" alt="Company Logo" width="100">
     </div>
     <div class="company-info">
-        <strong>Website:</strong> <input type="text" id="company-website" value="{{ $company['website'] }}" readonly>
+    <strong>Website:</strong> <a href="{{ $company['website'] }}" target="_blank">{{ $company['website'] }}</a>
+</div>
 </body>
 </html>

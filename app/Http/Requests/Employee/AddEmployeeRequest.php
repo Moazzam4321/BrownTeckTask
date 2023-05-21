@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Employee;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 
 class AddEmployeeRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class AddEmployeeRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -19,10 +20,16 @@ class AddEmployeeRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
-    public function rules(): array
+    public function rules(Request $request): array
     {
+        //dd($request);
         return [
             //
+            'first_name' => 'required|min:3',
+            'last_name' => 'required|min:3',
+            'company_id'=> 'nullable',
+            'email'=> 'nullable|email',
+            'Phone' => 'nullable|regex:/^[0-9]{10}$/',
         ];
     }
 }

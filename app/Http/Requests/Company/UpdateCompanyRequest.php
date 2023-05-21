@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Company;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 
 class UpdateCompanyRequest extends FormRequest
 {
@@ -19,14 +20,15 @@ class UpdateCompanyRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
-    public function rules(): array
+    public function rules(Request $request): array
     {
+    
         return [
             'companyId'=> 'required',
-            'name' => 'min:3',
-            'email' => 'email',
-            'company_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|dimensions:min_width=100,min_height=100|max:2048',
-            'website_name' => 'nullable|string',
+            'updatedFields[name]' => 'min:3',
+            'updatedFields.[email]' => 'email',
+            'updatedFields.[company_logo]' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|dimensions:min_width=100,min_height=100|max:2048',
+            'updatedFields.[website_name]' => 'nullable|string',
         ];
     }
 }

@@ -25,20 +25,20 @@ class JetstreamServiceProvider extends ServiceProvider
      * Bootstrap any application services.
      */
     public function boot(): void
-{
-    // ...
-    try{
-        Fortify::authenticateUsing(function (Request $request) {
-            $user = User::where('email', $request->email)->first();
+    {
+        // ...
+        try{
+            Fortify::authenticateUsing(function (Request $request) {
+                $user = User::where('email', $request->email)->first();
 
-            if ($user && Hash::check($request->password, $user->password)) {
-                return $user;
-            }
-        });
-    } catch (Exception $e){
-        $e->getMessage();
+                if ($user && Hash::check($request->password, $user->password)) {
+                    return $user;
+                }
+            });
+        } catch (Exception $e){
+            $e->getMessage();
+        }
     }
-}
     /**
      * Configure the permissions that are available within the application.
      */

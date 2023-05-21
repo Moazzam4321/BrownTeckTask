@@ -19,11 +19,10 @@ class EmployeeController extends Controller
     public function index()
     {
         try {
-            $companies =  Employee::paginate(10);
-            return view('show-companies',['data'=>$companies]);
-    } catch (Exception $e){
-        return response()->json(self::$response);
-    }
+            return view('show-employess');
+        } catch (Exception $e){
+            return response()->json(self::$response);
+        }
     }
 
     /**
@@ -32,7 +31,7 @@ class EmployeeController extends Controller
     public function create()
     {
         try {
-            return view('create-company');
+            return view('add-employee');
         }
     catch (Exception $e) {
         return response()->json(self::$response);
@@ -45,19 +44,17 @@ class EmployeeController extends Controller
     public function store(AddEmployeeRequest $request)
     {
         //
+       // dd("ök");
         try {
-            $response = ['error' => 'false' , 'message' => 'Company created successfully'];
-            $company_name = data_get($request, 'name', null);
-            $company_email = data_get($request, 'email',null);
-            $company_website = data_get($request , 'website' , null);
-            $company_logo = data_get($request, 'company_logo', null);
+           // dd($request);
+            $response = ['error' => 'false' , 'message' => 'Employee created successfully'];
+            $company_id = data_get($request, 'company_id', null);
+            $employee_email = data_get($request, 'email',null);
+            $employee_phone = data_get($request , 'Phone' , null);
+            $employee_first_name = data_get($request, 'first_name', null);
+            $employee_last_name = data_get($request, 'last_name', null);
             
-            if($company_logo !== null) 
-            {
-                $file_path = CompanyController::save_image($company_logo);
-            }
-            
-            Employee::create_company($company_name,$company_email,$company_website,$file_path);
+            Employee::create_employee($employee_first_name,$employee_last_name,$company_id,$employee_email,$employee_phone);
 
             return response()->json($response);
     } catch (Exception $e) {
@@ -71,10 +68,11 @@ class EmployeeController extends Controller
     public function show(Request $request)
     {
         try{
+           // dd("ok");
             $company_id = data_get($request , 'actionId' , null);
             $company_data =  Employee::where('id',$company_id)->first();
            
-            return view('company-show', ['company' => $company_data]);
+            return view('employee-show', ['employee' => $company_data]);
             } catch (Exception $e) {
                 return response()->json(self::$response);
             }
@@ -87,9 +85,9 @@ class EmployeeController extends Controller
     {
         
         try{
-            $company_id = data_get($request , 'actionId' , null);
-            $company_data =  Employee::where('id', $company_id)->first();
-            return view('edit-company', ['company' => $company_data]);
+            $employee_id = data_get($request , 'actionId' , null);
+            $employee_data =  Employee::where('id', $employee_id)->first();
+            return view('edit-employee', ['employee' => $employee_data]);
         } catch (Exception $e) {
             return response()->json(self::$response);
         }
@@ -98,12 +96,13 @@ class EmployeeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateEmployeeRequest $request, string $id)
+    public function update(UpdateEmployeeRequest $request)
     {
+        dd("ok");
         try{
             $response = ['error'=> true , 'message'=> 'Record not found'];
             $updated_fields = $request->updatedFields;
-            $company_id = data_get($request , 'companyId', null);
+            $company_id = data_get($request , 'employeeId', null);
             $company_data =  Employee::where('id',$company_id)->update($updated_fields);
             if($company_data) {
                 $response = ['error'=> false , 'message'=> 'Company updated succesfully'];
@@ -121,7 +120,7 @@ class EmployeeController extends Controller
     {
         try{
             $response = ['error' => true , 'message' => 'Record not found'];
-            $company_id = data_get($request , 'actionId' , null);
+            $company_id = data_get($request , 'employee_id' , null);
             $company_data =  Employee::where('id',$company_id)->first();
             if($company_data) 
             {
@@ -133,4 +132,18 @@ class EmployeeController extends Controller
             return response()->json(self::$response);
         }
     }
+
+    public function index1()
+    {
+        try{
+            $companies = Employee::orderBy('id', 'asc')->paginate(10);
+                return response()->json([
+                    'error'=> false,
+                    'data'=> $companies
+                ]);
+        } catch (Exception $e){
+            return response()->json(self::$response);
+        }
+    }
 }
+
